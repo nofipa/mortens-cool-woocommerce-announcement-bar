@@ -35,6 +35,19 @@ function mcab_settings_page_content()
         </div>
     </div>
 
+    <?php
+    $readme_path = plugin_dir_path(__FILE__) . 'README.md';
+    if (file_exists($readme_path)) {
+        $readme_content = file_get_contents($readme_path);
+        echo '<div class="readme-container" style="margin: 40px 20px 20px 20px">';
+        echo '<h2 class="text-xl">Tutorial / how to</h2>';
+        echo '<div class="mcab-readme bg-white text-center p-5 rounded-lg" style="margin: 20px;">';
+        echo nl2br($readme_content); // Convert newlines to <br> for HTML display
+        echo '</div>';
+        echo '</div>';
+    }
+    ?>
+
     <script type="text/javascript">
         // Adding Tailwind CSS CDN
         const tailwindCssLink = document.createElement('link');
