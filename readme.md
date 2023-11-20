@@ -35,7 +35,7 @@ Nope.
 
 ## License
 
-[Specify the license under which the plugin is released]
+Fuck all
 
 ## Acknowledgments
 
