@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Mortens Cool Announcement Bar
  * Description: A WooCommerce plugin to create an announcement bar.
- * Version: 1.0
+ * Version: 1.0.1
  * Author: Your Name
  */
 

@@ -27,6 +27,44 @@ function mcab_settings_page_content()
             ?>
         </form>
     </div>
+
+    <div id="mcab-preview-container" style="margin-top: 20px;">
+        <h2>Preview</h2>
+        <div id="mcab-preview" style="padding: 10px; text-align: center; border: 1px solid #ddd;">
+            <!-- Live preview will be displayed here -->
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        // Adding Tailwind CSS CDN
+        const tailwindCssLink = document.createElement('link');
+        tailwindCssLink.href = 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css';
+        tailwindCssLink.rel = 'stylesheet';
+        document.head.appendChild(tailwindCssLink);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const updatePreview = () => {
+                let content = document.querySelector('[name="mcab_settings[mcab_field_content]"]').value;
+                let textColor = document.querySelector('[name="mcab_settings[mcab_field_text_color]"]').value;
+                let bgColor = document.querySelector('[name="mcab_settings[mcab_field_background_color]"]').value;
+                let textSize = document.querySelector('[name="mcab_settings[mcab_field_text_size]"]').value;
+
+                let preview = document.getElementById('mcab-preview');
+                preview.innerHTML = content;
+                preview.style.color = textColor;
+                preview.style.backgroundColor = bgColor;
+                preview.style.fontSize = textSize;
+            };
+
+            // Update preview on input change
+            document.querySelectorAll('[name^="mcab_settings"]').forEach(input => {
+                input.addEventListener('input', updatePreview);
+            });
+
+            // Initial preview update
+            updatePreview();
+        });
+    </script>
 <?php
 }
 
