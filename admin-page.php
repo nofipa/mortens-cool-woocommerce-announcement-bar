@@ -37,6 +37,7 @@ function mcab_settings_page_content()
 
     <?php
     $readme_path = plugin_dir_path(__FILE__) . 'README.md';
+    echo $readme_path;
     if (file_exists($readme_path)) {
         $readme_content = file_get_contents($readme_path);
         echo '<div class="readme-container" style="margin: 40px 20px 20px 20px">';
