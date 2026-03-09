@@ -17,8 +17,13 @@ function mcab_display_announcement_bar() {
         }
     }
 
+    // Fall back to default announcement if no scheduled one is active
     if (!$active) {
-        return;
+        $default = get_option('mcab_default_announcement', []);
+        if (empty($default['enabled'])) {
+            return;
+        }
+        $active = $default;
     }
 
     if (!empty($active['custom_css'])) {

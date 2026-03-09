@@ -98,6 +98,19 @@ function mcab_handle_form_submission() {
         return null;
     }
 
+    if ($action === 'save_default') {
+        $default = [
+            'enabled'          => isset($_POST['mcab_default_enabled']) ? 1 : 0,
+            'content'          => wp_kses_post($_POST['mcab_default_content'] ?? ''),
+            'text_color'       => sanitize_hex_color($_POST['mcab_default_text_color'] ?? '#ffffff') ?: '#ffffff',
+            'background_color' => sanitize_hex_color($_POST['mcab_default_background_color'] ?? '#000000') ?: '#000000',
+            'text_size'        => sanitize_text_field($_POST['mcab_default_text_size'] ?? '16px'),
+            'custom_css'       => sanitize_textarea_field($_POST['mcab_default_custom_css'] ?? ''),
+        ];
+        update_option('mcab_default_announcement', $default);
+        return null;
+    }
+
     return null;
 }
 
@@ -236,6 +249,58 @@ function mcab_settings_page_content() {
             <div id="mcab-preview" style="padding: 10px; text-align: center; border: 1px solid #ddd;">
             </div>
         </div>
+
+        <hr style="margin-top: 40px;">
+
+        <?php $default = get_option('mcab_default_announcement', []); ?>
+        <h2 style="margin-top: 30px;">Default Announcement</h2>
+        <p class="description">Shown when no scheduled announcement is active.</p>
+
+        <form method="post" style="max-width: 600px;">
+            <?php wp_nonce_field('mcab_save_announcement', 'mcab_nonce'); ?>
+            <input type="hidden" name="mcab_action" value="save_default">
+
+            <table class="form-table">
+                <tr>
+                    <th><label for="mcab_default_enabled">Enabled</label></th>
+                    <td><input type="checkbox" id="mcab_default_enabled" name="mcab_default_enabled" <?= !empty($default['enabled']) ? 'checked' : ''; ?>></td>
+                </tr>
+                <tr>
+                    <th><label for="mcab_default_content">Content</label></th>
+                    <td><textarea id="mcab_default_content" name="mcab_default_content" cols="40" rows="5"><?= esc_textarea($default['content'] ?? ''); ?></textarea></td>
+                </tr>
+                <tr>
+                    <th><label for="mcab_default_text_color">Text Color</label></th>
+                    <td>
+                        <input type="text" id="mcab_default_text_color" name="mcab_default_text_color" value="<?= esc_attr($default['text_color'] ?? '#ffffff'); ?>">
+                        <p class="description">Hex format, e.g. #ffffff</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th><label for="mcab_default_background_color">Background Color</label></th>
+                    <td>
+                        <input type="text" id="mcab_default_background_color" name="mcab_default_background_color" value="<?= esc_attr($default['background_color'] ?? '#000000'); ?>">
+                        <p class="description">Hex format, e.g. #000000</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th><label for="mcab_default_text_size">Text Size</label></th>
+                    <td>
+                        <input type="text" id="mcab_default_text_size" name="mcab_default_text_size" value="<?= esc_attr($default['text_size'] ?? '16px'); ?>">
+                        <p class="description">E.g. 16px</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th><label for="mcab_default_custom_css">Custom CSS</label></th>
+                    <td>
+                        <textarea id="mcab_default_custom_css" name="mcab_default_custom_css" cols="40" rows="5"><?= esc_textarea($default['custom_css'] ?? ''); ?></textarea>
+                        <p class="description">Target: #mortens-cool-announcement-bar</p>
+                    </td>
+                </tr>
+            </table>
+
+            <?php submit_button('Save Default Announcement'); ?>
+        </form>
     </div>
 
     <script>
