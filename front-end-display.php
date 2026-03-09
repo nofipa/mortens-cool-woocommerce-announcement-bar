@@ -9,12 +9,9 @@ function mcab_display_announcement_bar() {
     $active = null;
 
     foreach ($announcements as $a) {
-        // No dates = always active (for migrated announcements)
-        if ($a['start_date'] === '' || $a['end_date'] === '') {
-            $active = $a;
-            break;
-        }
-        if ($now >= $a['start_date'] && $now < $a['end_date']) {
+        $s = $a['start_date'] ?: '0000-00-00T00:00';
+        $e = $a['end_date'] ?: '9999-12-31T23:59';
+        if ($now >= $s && $now < $e) {
             $active = $a;
             break;
         }
