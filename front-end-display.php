@@ -1,8 +1,8 @@
 <?php
 function mcab_display_announcement_bar() {
     $announcements = get_option('mcab_announcements', []);
-    if (!is_array($announcements) || empty($announcements)) {
-        return;
+    if (!is_array($announcements)) {
+        $announcements = [];
     }
 
     $now = current_time('Y-m-d\TH:i');
