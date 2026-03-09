@@ -301,6 +301,12 @@ function mcab_settings_page_content() {
 
             <?php submit_button('Save Default Announcement'); ?>
         </form>
+
+        <div id="mcab-default-preview-container" style="margin-top: 20px; max-width: 900px;">
+            <h2>Default Preview</h2>
+            <div id="mcab-default-preview" style="padding: 10px; text-align: center; border: 1px solid #ddd;">
+            </div>
+        </div>
     </div>
 
     <script>
@@ -320,6 +326,22 @@ function mcab_settings_page_content() {
                 el.addEventListener('input', updatePreview);
             });
             updatePreview();
+
+            const updateDefaultPreview = () => {
+                const content = document.getElementById('mcab_default_content').value;
+                const textColor = document.getElementById('mcab_default_text_color').value;
+                const bgColor = document.getElementById('mcab_default_background_color').value;
+                const textSize = document.getElementById('mcab_default_text_size').value;
+                const preview = document.getElementById('mcab-default-preview');
+                preview.innerHTML = content;
+                preview.style.color = textColor;
+                preview.style.backgroundColor = bgColor;
+                preview.style.fontSize = textSize;
+            };
+            document.querySelectorAll('#mcab_default_content, #mcab_default_text_color, #mcab_default_background_color, #mcab_default_text_size').forEach(el => {
+                el.addEventListener('input', updateDefaultPreview);
+            });
+            updateDefaultPreview();
         });
     </script>
     <?php
