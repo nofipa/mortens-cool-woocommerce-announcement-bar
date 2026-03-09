@@ -1,4 +1,6 @@
-🎤🎶 Yo, Check It - Mortens Cool Announcement Bar 🎶🎤  
+Version: 2.0.0 - Now with scheduled announcements!
+
+🎤🎶 Yo, Check It - Mortens Cool Announcement Bar 🎶🎤
 
 🚀 Verse 1:  
 Yo, yo, here we go, in the WooCommerce flow,  
