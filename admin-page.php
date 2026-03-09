@@ -21,12 +21,7 @@ function mcab_get_announcements() {
 }
 
 function mcab_dates_overlap($start1, $end1, $start2, $end2) {
-    // Empty start = beginning of time, empty end = forever
-    $s1 = $start1 ?: '0000-00-00T00:00';
-    $e1 = $end1 ?: '9999-12-31T23:59';
-    $s2 = $start2 ?: '0000-00-00T00:00';
-    $e2 = $end2 ?: '9999-12-31T23:59';
-    return $s1 < $e2 && $s2 < $e1;
+    return $start1 < $end2 && $start2 < $end1;
 }
 
 function mcab_handle_form_submission() {
@@ -63,8 +58,11 @@ function mcab_handle_form_submission() {
             'end_date'         => sanitize_text_field($_POST['mcab_end_date'] ?? ''),
         ];
 
-        // Validate: end must be after start
-        if ($entry['start_date'] && $entry['end_date'] && $entry['start_date'] >= $entry['end_date']) {
+        // Validate: both dates required
+        if (!$entry['start_date'] || !$entry['end_date']) {
+            return 'Both start date and end date are required. Use the default announcement for permanent messages.';
+        }
+        if ($entry['start_date'] >= $entry['end_date']) {
             return 'End date must be after start date.';
         }
 
@@ -89,8 +87,6 @@ function mcab_handle_form_submission() {
 
         // Sort by start_date
         usort($announcements, function($a, $b) {
-            if ($a['start_date'] === '') return 1;
-            if ($b['start_date'] === '') return -1;
             return strcmp($a['start_date'], $b['start_date']);
         });
 
@@ -150,12 +146,10 @@ function mcab_settings_page_content() {
                 </thead>
                 <tbody>
                     <?php foreach ($announcements as $i => $a):
-                        $s = $a['start_date'] ?: '0000-00-00T00:00';
-                        $e = $a['end_date'] ?: '9999-12-31T23:59';
-                        if ($now >= $s && $now < $e) {
+                        if ($now >= $a['start_date'] && $now < $a['end_date']) {
                             $status = 'Active';
                             $badge_color = '#46b450';
-                        } elseif ($now < $s) {
+                        } elseif ($now < $a['start_date']) {
                             $status = 'Scheduled';
                             $badge_color = '#0073aa';
                         } else {
@@ -167,7 +161,7 @@ function mcab_settings_page_content() {
                             <td><?= $i + 1; ?></td>
                             <td><?= esc_html(mb_strimwidth(wp_strip_all_tags($a['content']), 0, 50, '...')); ?></td>
                             <td><?= $a['start_date'] ? esc_html($a['start_date']) : '—'; ?></td>
-                            <td><?= $a['end_date'] ? esc_html($a['end_date']) : 'Indefinite'; ?></td>
+                            <td><?= esc_html($a['end_date']); ?></td>
                             <td><span style="color: #fff; background: <?= $badge_color; ?>; padding: 2px 8px; border-radius: 3px; font-size: 12px;"><?= $status; ?></span></td>
                             <td>
                                 <a href="<?= admin_url('admin.php?page=mcab-settings-page&edit=' . $i); ?>">Edit</a>
@@ -231,10 +225,7 @@ function mcab_settings_page_content() {
                 </tr>
                 <tr>
                     <th><label for="mcab_end_date">End Date</label></th>
-                    <td>
-                        <input type="datetime-local" id="mcab_end_date" name="mcab_end_date" value="<?= esc_attr($edit_data['end_date'] ?? ''); ?>">
-                        <p class="description">Leave blank for indefinite</p>
-                    </td>
+                    <td><input type="datetime-local" id="mcab_end_date" name="mcab_end_date" value="<?= esc_attr($edit_data['end_date'] ?? ''); ?>"></td>
                 </tr>
             </table>
 

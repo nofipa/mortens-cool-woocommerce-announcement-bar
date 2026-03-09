@@ -9,9 +9,7 @@ function mcab_display_announcement_bar() {
     $active = null;
 
     foreach ($announcements as $a) {
-        $s = $a['start_date'] ?: '0000-00-00T00:00';
-        $e = $a['end_date'] ?: '9999-12-31T23:59';
-        if ($now >= $s && $now < $e) {
+        if ($now >= $a['start_date'] && $now < $a['end_date']) {
             $active = $a;
             break;
         }
