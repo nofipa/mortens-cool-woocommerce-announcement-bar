@@ -1,4 +1,4 @@
-Version: 2.0.0 - Now with scheduled announcements!
+Version: 2.1.0 - Now visible to Editors and Shop managers, with in-dashboard updates!
 
 🎤🎶 Yo, Check It - Mortens Cool Announcement Bar 🎶🎤
 

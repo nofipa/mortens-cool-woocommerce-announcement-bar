@@ -1,9 +1,14 @@
 <?php
+// Capability gating who can see/edit the announcement bar.
+// edit_others_posts is held by Administrators, Shop managers, and Editors,
+// but not by Authors/Contributors/Customers/Subscribers.
+define('MCAB_CAPABILITY', 'edit_others_posts');
+
 function mcab_add_admin_menu() {
     add_menu_page(
         'Mortens Cool Announcement Bar',
         'Announcement Bar',
-        'manage_options',
+        MCAB_CAPABILITY,
         'mcab-settings-page',
         'mcab_settings_page_content',
         'dashicons-megaphone',
@@ -28,7 +33,7 @@ function mcab_handle_form_submission() {
     if (!isset($_POST['mcab_action'])) {
         return null;
     }
-    if (!current_user_can('manage_options')) {
+    if (!current_user_can(MCAB_CAPABILITY)) {
         return null;
     }
     if (!wp_verify_nonce($_POST['mcab_nonce'], 'mcab_save_announcement')) {
@@ -111,7 +116,7 @@ function mcab_handle_form_submission() {
 }
 
 function mcab_settings_page_content() {
-    if (!current_user_can('manage_options')) {
+    if (!current_user_can(MCAB_CAPABILITY)) {
         return;
     }
 
